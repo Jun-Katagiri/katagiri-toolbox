@@ -15,7 +15,7 @@ They share the common shadcn/ui components and DB.
 │   ├─ sequence-runner/   # 1行＝1ステップのシーケンス実行ツール
 │   ├─ simon/             # 9パネル版 Simon Says（公開予定）
 │   ├─ regex-editor/      # 正規表現パターン＆ロジックエディタ（予定）
-│   ├─ IR-doc-checker/    # Comparing the bilingual IR file (planned)
+│   ├─ IR-doc-checker/    # Compares a bilingual IR file (planned)
 │   └─ (more tools...)
 │
 ├─ packages/
