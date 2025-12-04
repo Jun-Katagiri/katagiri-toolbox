@@ -158,13 +158,3 @@ This project is part of a public portfolio and is intended for demonstration and
 
 ---
 
-# 👍 必要なら…
-
-* **もっと技術寄りの README**
-* **もっとマーケ寄り（ポートフォリオ向け）の README**
-* **日本語版 README**
-* **GIF アニメーション付きの README**
-
-などにもすぐ変換できます。
-
-どうする?
