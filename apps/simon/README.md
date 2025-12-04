@@ -1,78 +1,90 @@
-# 📝 **Simon 9-Panel Memory Game — README（ベース版）
+# 📝 **PC Numpad Memory Game — README（10キー版・完成）**
 
 ## Overview
 
-This is a **9-panel memory game inspired by “Simon Says.”**
-A random sequence of highlighted panels is played, and the player must reproduce the same sequence.
-Each successful round extends the sequence and increases the score.
+This is a **numeric memory game inspired by “Simon Says,”**
+designed around the **PC numeric keypad layout (0–9)**.
 
-This application is part of a **Turborepo monorepo** and lives under:
+A sequence of digits (0–9) is highlighted using the visual layout of a standard PC numpad:
+
+```
+7 8 9
+4 5 6
+1 2 3
+  0
+```
+
+The player must reproduce the sequence using either:
+
+* the on-screen keypad, or
+* a physical **PC numpad / USB numeric keypad / calculator-style keypad**
+
+Each successful round adds one more digit to the sequence and increases the score.
+
+This mini-app lives under:
 
 ```
 apps/simon/
 ```
 
-The goal of this mini-app is to demonstrate:
-
-* Front-end interaction with the **Next.js App Router**
-* Real-time UI feedback using React state
-* Minimal but clean **game state management**
-* A simple **serverless API** using the Next.js route handler
-* Persistent **high-score storage** backed by **Drizzle ORM**
-
-  * SQLite (development)
-  * Turso (production)
-* Component styling using **shadcn/ui + Tailwind CSS**
-
-This project doubles as a **public portfolio entry**, showing the developer’s ability to build interactive UI, manage game logic, and integrate a backend in a modern full-stack web environment.
+and serves as a compact demonstration of **interactive UI**,
+**real-time input handling**, and **full-stack workflow** with modern web tools.
 
 ---
 
 ## Features
 
-### 🎮 Game System
+### 🎮 Game Mechanics
 
-* 3×3 grid (9 panels)
-* Random sequence playback
-* Player taps panels in order
-* Score increases each round
-* Game ends upon a mistake
+* Visual keypad replicating the PC numpad layout
+* Sequence plays one digit at a time
+* Player repeats the digits in order
+* Score increments each round
+* Incorrect input → game over
+* Optional keyboard input (0–9 numpad keys)
 
-### 🏆 High Score Recording
+### 🏆 High Score System
 
-* After game over, player enters a nickname
-* Score is sent to the backend via a POST API
-* Top scores are stored in the Turso database
-* The top 10 scores are displayed on the page
+* After game over, the user enters a nickname
+* Score is sent to a backend API
+* High scores are stored using Drizzle ORM
+* Top 10 scores are displayed on the page
+* Database:
 
-### 🌐 Tech Stack
+  * **SQLite** in development
+  * **Turso** in production
+
+---
+
+## Tech Stack
 
 * **Next.js (App Router)**
 * **React + Hooks**
 * **shadcn/ui**
 * **Tailwind CSS**
-* **Zod (for API validation)**
+* **Zod** for API input validation
 * **Drizzle ORM**
-* **SQLite** (local development)
-* **Turso** (production)
+* **SQLite** (local)
+* **Turso** (hosted, production)
 * **Vercel** (deployment)
+* **Turborepo** monorepo structure
 
 ---
 
-## Project Structure (inside this app)
+## App Structure (inside this application)
 
 ```
 apps/simon/
   ├─ app/
-  │   ├─ page.tsx                 ← Main game UI
+  │   ├─ page.tsx                 ← UI, keypad layout, game logic (client)
   │   └─ api/
   │        └─ scores/
-  │             └─ route.ts       ← High score API (GET/POST)
+  │             └─ route.ts       ← High Score API (GET/POST)
   ├─ db/
-  │   ├─ schema.ts                ← Drizzle table schema
-  │   └─ client.ts                ← DB client (Turso / SQLite)
-  ├─ public/                      ← Static assets (if needed)
-  ├─ README.md                    ← You are here
+  │   ├─ schema.ts                ← Drizzle schema (scores table)
+  │   └─ client.ts                ← Database client (Turso / SQLite)
+  ├─ public/                      ← Optional assets
+  ├─ README.md                    ← This file
   └─ package.json
 ```
 
@@ -82,24 +94,18 @@ apps/simon/
 
 ### **GET `/api/scores`**
 
-Returns the top high scores.
-
-**Response example**
-
-* `[{ id, name, score, createdAt }, ...]`
+Returns the top stored high scores.
 
 ### **POST `/api/scores`**
 
 Registers a new high score.
 
-**Payload**
+Payload:
 
-* `name`: string (1–32 chars)
-* `score`: integer (>= 0)
+* `name` — string (1–32 chars)
+* `score` — integer (>= 0)
 
-**Validation**
-
-* Performed using Zod
+Validation handled by **Zod**.
 
 ---
 
@@ -111,18 +117,18 @@ Registers a new high score.
 pnpm install
 ```
 
-### 2. Set up environment variables
+### 2. Environment variables
 
-Inside `apps/simon/.env.local`:
+Create `apps/simon/.env.local` and set:
 
 ```
 TURSO_DATABASE_URL=""
 TURSO_AUTH_TOKEN=""
 ```
 
-For local SQLite development, the URL can be replaced with a file-based libsql URL.
+For local development, the database can be changed to a SQLite file URL.
 
-### 3. Run the simon app only
+### 3. Run this app only
 
 ```
 pnpm dev --filter simon
@@ -132,29 +138,26 @@ pnpm dev --filter simon
 
 ## Deployment (Vercel + Turso)
 
-1. Create a Turso database and obtain:
-
-   * `TURSO_DATABASE_URL`
-   * `TURSO_AUTH_TOKEN`
-2. Set these in the Vercel project settings
-3. Deploy using Vercel (monorepo-aware)
+1. Create a Turso database
+2. Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in Vercel project settings
+3. Deploy (Vercel automatically detects the app inside `apps/simon/`)
 
 ---
 
-## Future Enhancements (optional ideas)
+## Future Enhancements
 
-* Sound effects
-* Difficulty modes (speed-up / double playback)
-* Shareable score page (`/score/[id]`)
-* Leaderboard sorting improvements
-* UI animations (panel press, failure flash)
-* Responsive layout tuning
+* Sound feedback and error sounds
+* Keypress highlight animations
+* Quick-mode (shorter glow time)
+* Reverse mode (repeat the sequence backwards)
+* Time-attack challenges
+* Score sharing via unique URLs
+* Full keyboard support (including fallback keys)
 
 ---
 
 ## License
 
-This project is part of a public portfolio and is intended for demonstration and educational purposes.
+This project is part of a public portfolio and intended for demonstration and educational purposes.
 
 ---
-
