@@ -1,4 +1,4 @@
-# 📝 **PC Numpad Memory Game — README（10キー版・完成）**
+# 📝 **PC Numpad Memory Game — README（10キー版）**
 
 ## Overview
 
